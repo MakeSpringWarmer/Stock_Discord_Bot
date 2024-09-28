@@ -1,6 +1,6 @@
 import yfinance as yf
 from discord.ext import commands
-from tools.stock import calculate_rsi, get_stock_candlestick
+from tools.stock import calculate_rsi, get_stock_candlestick, get_stock_chart
 import discord
 
 
@@ -71,6 +71,15 @@ class Stock(commands.Cog):
             await ctx.send(f"無法取得 {symbol} 的資料。")
         else:
             picture = discord.File(fp=img_buffer, filename=f"{symbol}_candlestick.png")
+            await ctx.send(file=picture)
+
+    @commands.command()
+    async def analysis(self, ctx, symbol: str):
+        img_buffer = get_stock_chart(symbol)
+        if img_buffer is None:
+            await ctx.send(f"無法取得 {symbol} 的資料。")
+        else:
+            picture = discord.File(fp=img_buffer, filename=f"{symbol}_analysis.png")
             await ctx.send(file=picture)
 
 
